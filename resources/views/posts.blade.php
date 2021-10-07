@@ -1,10 +1,7 @@
-<html>
+@extends('layouts.app')
 
-<head>
-    <title>Blog
-
-    </title>
-</head>
+@section('title','Blog')
+@section('content')
 
 <body>
     <h1>Posts</h1>
@@ -21,5 +18,4 @@
 
 
 </body>
-
-</html>
+@endsection
