@@ -28,8 +28,8 @@ Route::get(
 );
 
 Route::get(
-    '/posts/{id}',
+    '/posts/{post}',
     [PostController::class, 'show']
 
 
-);
+)->name('post');
