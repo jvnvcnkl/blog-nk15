@@ -11,4 +11,11 @@
     {{$post->body}}
 </div>
 
+<h5>Comments </h5>
+@forelse($post->comments as $comment)
+{{$comment->body}}
+@empty
+<span>No comments to show</span>
+@endforelse
+
 @endsection
