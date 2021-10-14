@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\CreatePostRequest;
-
+use App\Comment;
 
 class PostController extends Controller
 {
@@ -19,12 +19,14 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        if ($post->is_published) {
-            throw new ModelNotFoundException;
-        }
+        // if ($post->is_published) {
+        //     throw new ModelNotFoundException;
+        // }
+
+        $comment = Comment::with('post')->where('id', $post->id);
 
         // $post = Post::with('comments')->findorFail($post);
-        return view('posts.show', compact('post'));
+        return view('posts.show', compact('post', 'comment'));
     }
 
     public function create()
@@ -42,7 +44,18 @@ class PostController extends Controller
         // $post->save();
 
         $data = $request->validated();
-        $newPost = Post::create($data);
+        // $newPost = Post::create($data);
+        // $newPost = auth()->user()->posts()->create($data);
+
+        $newPost = Post::create(
+            [
+                'title' => $request->get('title'),
+                'body' => $request->get('bosy'),
+                'is_published' => $request->get('is_published'),
+                'user_id' => auth()->user()->id,
+
+            ]
+        );
 
         return redirect('/posts');
     }

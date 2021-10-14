@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AuthController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,13 +20,24 @@ use App\Http\Controllers\PostController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/posts');
 });
 
+Route::group(['middleware' => 'auth'], function () {
 
-
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/create', [PostController::class, 'create']);
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('post');
-
-Route::post('/posts', [PostController::class, 'store']);
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/posts/create', [PostController::class, 'create']);
+    Route::get('/posts/{post}', [PostController::class, 'show'])->name('post');
+    Route::post('/posts', [PostController::class, 'store']);
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('createComment');
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+Route::group(
+    ['middleware' => 'guest'],
+    function () {
+        Route::get('/register', [AuthController::class, 'getRegisterForm']);
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::get('/login', [AuthController::class, 'getLoginBlade'])->name('login');
+        Route::post('/login', [AuthController::class, 'login']);
+    }
+);
