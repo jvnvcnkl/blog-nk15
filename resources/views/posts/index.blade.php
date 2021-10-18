@@ -11,7 +11,7 @@
 
                 {{$post->title }} {{$post->comments->count() }}
             </a>
-        </li>
+            - by <a href="{{ route ('author', [ 'author' => $post->user_id ]) }}">{{$post->user->name}}</a> </li>
 
         @endforeach
     </ul>

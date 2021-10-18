@@ -9,7 +9,11 @@ class Post extends Model
     protected $fillable = ['title', 'body', 'is_published', 'user_id'];
     public static function unPublished()
     {
-        return self::where('is_published', false);
+        return self::with('comments', 'user')->where('is_published', false);
+    }
+    public static function published()
+    {
+        return self::with('comments', 'user')->where('is_published', true);
     }
     public function comments()
     {
